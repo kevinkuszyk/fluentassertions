@@ -1,4 +1,4 @@
-if ($env:TEAMCITY_VERSION) {
+﻿if ($env:TEAMCITY_VERSION) {
 	# When PowerShell is started through TeamCity's Command Runner, the standard
 	# output will be wrapped at column 80 (a default). This has a negative impact
 	# on service messages, as TeamCity quite naturally fails parsing a wrapped

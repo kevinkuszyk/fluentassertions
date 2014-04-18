@@ -21,8 +21,38 @@
 	
 	echo $exec
 	
-    # exec { iex "& $exec" } | Transform-MSTestOuputToTeamCity
-     iex "& $exec" | Transform-MSTestOuputToTeamCity
+    iex "& $exec" | Transform-MSTestOuputToTeamCity
+
+    TeamCity-TestSuiteFinished $name
+}
+
+function Run-VsTestWithTeamCityOutput {
+    param(
+        [string]$vsTestExePath,
+        [string]$name,
+        [string[]]$assemblies,
+        [string]$configfile
+    )
+
+    TeamCity-TestSuiteStarted $name
+    
+	$exec = """$vsTestExePath"" /InIsolation /Logger:trx"
+	
+	foreach($assembly in $assemblies){
+		$exec += " ""$assembly"""
+	}	
+	
+	Write-Host $exec
+	
+    $output = "& $exec" 
+	
+	Write-Host $output
+	
+	$output -match '[.+\.trx]'
+	
+	echo $matches[0]
+	
+	TeamCity-WriteServiceMessage 'importData' @{ type='mstest'; path=$path }
 
     TeamCity-TestSuiteFinished $name
 }
