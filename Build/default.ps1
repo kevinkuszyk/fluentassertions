@@ -61,25 +61,25 @@ task Compile {
 task RunTests {
 	TeamCity-Block "Running unit tests" {
 	
-#        Run-MsTestWithTeamCityOutput `
-#			"$MsTestPath"`
-#			".NET 4.0"`
-#			"$BaseDirectory\FluentAssertions.Net40.Specs\bin\Release\FluentAssertions.Net40.Specs.dll"`
-#			"$BaseDirectory\Default.testsettings"
-#
-#		Run-MsTestWithTeamCityOutput `
-#			"$MsTestPath"`
-#			".NET 4.5"`
-#			"$BaseDirectory\FluentAssertions.Net45.Specs\bin\Release\FluentAssertions.Net45.Specs.dll"`
-#			"$BaseDirectory\Default.testsettings"
-#
-#		Run-MsTestWithTeamCityOutput `
-#			"$MsTestPath"`
-#			"PCL"`
-#			"$BaseDirectory\FluentAssertions.Portable.Specs\bin\Release\FluentAssertions.Portable.Specs.dll"`
-#			"$BaseDirectory\Default.testsettings"
+        Invoke-MsTestWithTeamCityOutput `
+			"$MsTestPath"`
+			".NET 4.0"`
+			"$BaseDirectory\FluentAssertions.Net40.Specs\bin\Release\FluentAssertions.Net40.Specs.dll"`
+			"$BaseDirectory\Default.testsettings"
 
-		Run-VsTestWithTeamCityOutput `
+		Invoke-MsTestWithTeamCityOutput `
+			"$MsTestPath"`
+			".NET 4.5"`
+			"$BaseDirectory\FluentAssertions.Net45.Specs\bin\Release\FluentAssertions.Net45.Specs.dll"`
+			"$BaseDirectory\Default.testsettings"
+
+		Invoke-MsTestWithTeamCityOutput `
+			"$MsTestPath"`
+			"PCL"`
+			"$BaseDirectory\FluentAssertions.Portable.Specs\bin\Release\FluentAssertions.Portable.Specs.dll"`
+			"$BaseDirectory\Default.testsettings"
+
+		Invoke-VsTestWithTeamCityOutput `
 			"$VsTestPath" `
 			"WinRT" `
 			"$BaseDirectory\FluentAssertions.WinRT.Specs\AppPackages\WinRT.Specs_1.1.0.0_AnyCPU_Test\WinRT.Specs_1.1.0.0_AnyCPU.appx" `

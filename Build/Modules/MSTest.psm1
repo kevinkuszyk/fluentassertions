@@ -1,4 +1,4 @@
-﻿function Run-MsTestWithTeamCityOutput {
+﻿function Invoke-MsTestWithTeamCityOutput {
     param(
         [string]$msTestExePath,
         [string]$name,
@@ -26,7 +26,7 @@
     TeamCity-TestSuiteFinished $name
 }
 
-function Run-VsTestWithTeamCityOutput {
+function Invoke-VsTestWithTeamCityOutput {
     param(
         [string]$vsTestExePath,
         [string]$name,
@@ -36,24 +36,21 @@ function Run-VsTestWithTeamCityOutput {
 
     TeamCity-TestSuiteStarted $name
     
-	$exec = """$vsTestExePath"" /InIsolation /Logger:trx"
+	$exec = @("/InIsolation", "/Logger:trx")
 	
 	foreach($assembly in $assemblies){
-		$exec += " ""$assembly"""
+		$exec += """$assembly"""
 	}	
 	
-	Write-Host $exec
+    $output = & $vsTestExePath $exec
 	
-    $output = "& $exec" 
+	foreach ($line in $output)
+	{
+		if ($line -match 'Results File: (.+\.trx)') {
+			TeamCity-WriteServiceMessage 'importData' @{ type='mstest'; path=$matches[1] }
+		}
+	}
 	
-	Write-Host $output
-	
-	$output -match '[.+\.trx]'
-	
-	echo $matches[0]
-	
-	TeamCity-WriteServiceMessage 'importData' @{ type='mstest'; path=$path }
-
     TeamCity-TestSuiteFinished $name
 }
 
