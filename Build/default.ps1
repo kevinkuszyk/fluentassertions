@@ -49,15 +49,13 @@ task ApplyPackageVersioning {
 task Compile {
     TeamCity-Block "Compiling" {  
        
-	   	& $MakeAppxPath
-	   
-        if ($MsBuildLoggerPath -ne "")
+	   	if ($MsBuildLoggerPath -ne "")
         {
             Write-Host "Using TeamCity MSBuild logger"
             $logger = "/logger:JetBrains.BuildServer.MSBuildLoggers.MSBuildLogger," + $MsBuildLoggerPath
         }
             
-	    exec { msbuild /v:q /p:Platform="Any CPU" $SlnFile /p:Configuration=Release /t:Rebuild $logger}
+	    exec { msbuild /v:d /p:Platform="Any CPU" $SlnFile /p:Configuration=Release /t:Rebuild $logger}
     }
 }
 
