@@ -9,6 +9,7 @@
 	$Branch = ""
 	$MsTestPath = "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\MSTest.exe"
 	$VsTestPath = "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
+	$MakeAppxPath = "C:\Program Files (x86)\Windows Kits\8.1\bin\x86\makeappx.exe"
 }
 
 task default -depends Clean, ApplyAssemblyVersioning, ApplyPackageVersioning, Compile, RunTests, BuildPackage, PublishToMyget
@@ -48,6 +49,8 @@ task ApplyPackageVersioning {
 task Compile {
     TeamCity-Block "Compiling" {  
        
+	   	& $MakeAppxPath
+	   
         if ($MsBuildLoggerPath -ne "")
         {
             Write-Host "Using TeamCity MSBuild logger"
@@ -61,23 +64,23 @@ task Compile {
 task RunTests {
 	TeamCity-Block "Running unit tests" {
 	
-        Invoke-MsTestWithTeamCityOutput `
-			"$MsTestPath"`
-			".NET 4.0"`
-			"$BaseDirectory\FluentAssertions.Net40.Specs\bin\Release\FluentAssertions.Net40.Specs.dll"`
-			"$BaseDirectory\Default.testsettings"
-
-		Invoke-MsTestWithTeamCityOutput `
-			"$MsTestPath"`
-			".NET 4.5"`
-			"$BaseDirectory\FluentAssertions.Net45.Specs\bin\Release\FluentAssertions.Net45.Specs.dll"`
-			"$BaseDirectory\Default.testsettings"
-
-		Invoke-MsTestWithTeamCityOutput `
-			"$MsTestPath"`
-			"PCL"`
-			"$BaseDirectory\FluentAssertions.Portable.Specs\bin\Release\FluentAssertions.Portable.Specs.dll"`
-			"$BaseDirectory\Default.testsettings"
+#        Invoke-MsTestWithTeamCityOutput `
+#			"$MsTestPath"`
+#			".NET 4.0"`
+#			"$BaseDirectory\FluentAssertions.Net40.Specs\bin\Release\FluentAssertions.Net40.Specs.dll"`
+#			"$BaseDirectory\Default.testsettings"
+#
+#		Invoke-MsTestWithTeamCityOutput `
+#			"$MsTestPath"`
+#			".NET 4.5"`
+#			"$BaseDirectory\FluentAssertions.Net45.Specs\bin\Release\FluentAssertions.Net45.Specs.dll"`
+#			"$BaseDirectory\Default.testsettings"
+#
+#		Invoke-MsTestWithTeamCityOutput `
+#			"$MsTestPath"`
+#			"PCL"`
+#			"$BaseDirectory\FluentAssertions.Portable.Specs\bin\Release\FluentAssertions.Portable.Specs.dll"`
+#			"$BaseDirectory\Default.testsettings"
 
 		Invoke-VsTestWithTeamCityOutput `
 			"$VsTestPath" `
